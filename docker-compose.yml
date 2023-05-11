@@ -2,11 +2,22 @@ version: "3"
 
 services:
   nginx:
-    build: ./docker/nginx
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
     ports:
       - "8080:80"
 
   php-fpm:
-    build: ./docker/php
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
     volumes:
       - ./api:/var/www/html
+
+  php-cli:
+    build:
+      context: .
+      dockerfile: ./docker/php-cli/Dockerfile
+    volumes:
+      - ./api:/srv/www
