@@ -9,7 +9,7 @@ ps: dc-ps
 dc-up:
 	docker compose up -d
 dc-down:
-	docker compose down
+	docker compose down --remove-orphans
 dc-stop:
 	docker compose stop
 dc-build:
@@ -20,9 +20,9 @@ dc-ps:
 	docker ps
 
 cli-composer-install:
-	docker compose run --rm -it php-cli composer install
+	docker compose run --rm php-cli composer install
 cli-vendor-remove:
-	docker compose run --rm -it php-cli rm -rf ./vendor
+	docker compose run --rm php-cli rm -rf ./vendor
 cli-composer-reinstall: cli-vendor-remove cli-composer-install
 
 cli-sh:

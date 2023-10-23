@@ -3,21 +3,24 @@ version: "3"
 services:
   nginx:
     build:
-      context: .
-      dockerfile: ./docker/nginx/Dockerfile
+      context: ./docker/nginx
     ports:
       - "8080:80"
+    depends_on:
+      - php-fpm
 
   php-fpm:
     build:
-      context: .
-      dockerfile: ./docker/php/Dockerfile
+      context: ./docker/php-fpm
     volumes:
-      - ./api:/var/www/html
+      - ./api:/app
 
   php-cli:
     build:
-      context: .
-      dockerfile: ./docker/php-cli/Dockerfile
+      context: ./docker/php-cli
     volumes:
-      - ./api:/srv/www
+      - ./api:/app
+      - composer:/root/.composer/cache
+
+volumes:
+  composer:
