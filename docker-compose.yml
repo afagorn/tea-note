@@ -1,6 +1,32 @@
-version: '3'
-
 services:
+  nginx:
+    build:
+      context: ./docker/dev/nginx
+      dockerfile: nginx.dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - php-fpm
+
+  php-fpm:
+    build:
+      context: ./docker/dev/php
+      dockerfile: php-fpm.dockerfile
+    volumes:
+      - ./api:/app
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  php-cli:
+    build:
+      context: ./docker/dev/php
+      dockerfile: php-cli.dockerfile
+    volumes:
+      - ./api:/app
+      - composer:/root/.composer/cache
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
 ###> doctrine/doctrine-bundle ###
   database:
     image: postgres:${POSTGRES_VERSION:-15}-alpine
@@ -16,6 +42,7 @@ services:
 ###< doctrine/doctrine-bundle ###
 
 volumes:
+  composer:
 ###> doctrine/doctrine-bundle ###
   database_data:
 ###< doctrine/doctrine-bundle ###
